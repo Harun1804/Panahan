@@ -1,0 +1,23 @@
+1. detail pengguna
+CREATE VIEW detail_pengguna
+AS
+SELECT akun_pengguna.*,admin.id_admin,admin.nama_admin,admin.nowa_admin,member.id_member,member.nama_member,member.nowa_member,pelatih.id_pelatih,pelatih.nowa_pelatih,pelatih.nama_pelatih
+FROM akun_pengguna
+LEFT JOIN admin ON admin.id_pengguna = akun_pengguna.id_pengguna
+LEFT JOIN member ON member.id_pengguna = akun_pengguna.id_pengguna
+LEFT JOIN pelatih ON pelatih.id_pengguna = akun_pengguna.id_pengguna
+
+2. detail pelatihan
+CREATE VIEW detail_pelatihan
+AS
+SELECT pelatihan.*,member.nama_member,COUNT(pelatihan.id_member) as "jml_latihan",member.nowa_member
+FROM pelatihan
+INNER JOIN member ON member.id_member = pelatihan.id_member
+GROUP BY pelatihan.id_pelatih,pelatihan.id_member
+
+3. detail pembayaran
+CREATE VIEW detail_pembayaran
+AS
+SELECT detail_pengguna.*,pembayaran.id_pembayaran,pembayaran.bukti_pembayaran,pembayaran.tgl_bayar,pembayaran.status_pembayaran
+FROM pembayaran
+INNER JOIN detail_pengguna ON detail_pengguna.id_member = pembayaran.id_member
